@@ -1,0 +1,7 @@
+jeffreytse/zsh-vi-mode
+thetic/extract
+zdharma-continuum/fast-syntax-highlighting
+zsh-users/zsh-autosuggestions
+marlonrichert/zsh-autocomplete
+valentinocossar/vscode
+romkatv/powerlevel10k

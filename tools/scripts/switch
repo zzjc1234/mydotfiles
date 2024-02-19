@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+bgc(){
+	kitty @ set-background-image ~/Desktop/Personal/alena-aenami-bluehour-1k.jpg
+}
+
+bgb(){
+	kitty @ set-background-image ~/Desktop/Personal/black.jpg
+}

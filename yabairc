@@ -1,0 +1,156 @@
+#!/usr/bin/env sh
+
+# _ __ ___  _   _   _   _  __ _| |__   __ _ _ __ ___
+#| '_ ` _ \| | | | | | | |/ _` | '_ \ / _` | '__/ __| 
+#| | | | | | |_| | | |_| | (_| | |_) | (_| | | | (__ 
+#|_| |_| |_|\__, |  \__, |\__,_|_.__/ \__,_|_|  \___|
+#           |___/   |___/                              
+
+# 如果没有关闭 Mac 的 SIP，那么在 BigSur 及以上的系统中，更改配置文件后，需要手动加载过配置文件
+#  - https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)
+# 如果已经关闭 Mac 的 SIP，那么通过下面命令就可以让 yabai 的配置文件热更新了
+# sudo yabai --load-sa
+# sudo /opt/homebrew/bin/yabai --load-sa
+# 也可以在该配置文件中增加这句，这样每次重启系统时不用自己输入
+# yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+# /opt/homebrew/bin/yabai -m signal --add event=dock_did_restart action="sudo /opt/homebrew/bin/yabai --load-sa"
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+
+
+# ------------------------------------------------------------------------------------- #
+# ------------------------------global settings---------------------------------------- #
+# ------------------------------------------------------------------------------------- #
+
+# 在多显示器情况下，新建的窗口默认在**哪个显示器**出现
+# - default: 在创建窗口的显示器出现（mac 的默认行为）
+# - focused: 在当前聚焦的显示器出现
+# - cursor: 在鼠标指针所在的显示器出现
+yabai -m config window_origin_display        default        
+
+# 当前屏幕下，新窗口的出现在**屏幕的哪个位置**
+# - first_child: （父节点模式）如果当前是 vertical split，则出现在*左侧*；如果是 horizontal split，则出现在*上方*
+# - second_child: （子节点模式）如果当前是 vertical split，则出现在*右侧*；如果是 horizontal split，则出现在*下方*
+yabai -m config window_placement             second_child
+
+# 浮动窗口是否置顶
+yabai -m config window_topmost               off
+
+# 窗口阴影值
+# - on: 总是展示
+# - off: 总是关闭
+# - float: 只有浮动窗口展示
+yabai -m config window_shadow                on
+
+# 窗口不透明
+# - on: 总是展示
+# - off: 总是关闭
+yabai -m config window_opacity               off
+# *激活*窗口的不透明度（仅当 window_opacity on 时才有效）
+yabai -m config active_window_opacity        1.0
+# *普通*窗口不透明度（仅当 window_opacity on 时才有效）
+yabai -m config normal_window_opacity        0.90
+# 激活窗口和普通窗口切换时，*不透明度的过渡时间*（仅当 window_opacity on 时才有效）
+yabai -m config window_opacity_duration      0.0
+
+# 窗口边框
+# - on: 总是展示
+# - off: 总是关闭
+yabai -m config window_border                off
+# 窗口*边框宽度*（单位 px）
+yabai -m config window_border_width          6
+# 激活窗口的边框颜色
+yabai -m config active_window_border_color   0xff775759
+# 普通窗口的边框颜色
+yabai -m config normal_window_border_color   0xff555555
+yabai -m config insert_feedback_color        0xffd75f5f
+
+# 所有窗口都使用相同比例的空间
+# - on: 总是开启
+# - off: 总是关闭
+yabai -m config auto_balance                 off
+# 分屏后*旧:新*窗口的比例（仅当 auto_balance off 时有效）
+yabai -m config split_ratio                  0.50
+
+# ==================================================== #
+# ====================鼠标相关======================== #
+# ==================================================== #
+
+# 窗口切换时，鼠标自动移动到当前使用窗口的中心
+# - on: 总是开启
+# - off: 总是关闭
+yabai -m config mouse_follows_focus          off
+
+# 是否自动聚焦到鼠标所在窗口
+# - off: 总是关闭
+# - autoraise: 
+# - autofocus: 
+yabai -m config focus_follows_mouse          off            
+
+# 按住对应修饰键时，yabai 不自动调整平铺（默认情况下调整窗口大小时，yabai 会自适应调整平铺）；配置时通常会关闭 focus_follows_mouse
+# - cmd
+# - alt
+# - shift
+# - ctrl
+# - fn
+yabai -m config mouse_modifier               fn
+# modifier + 左键的行为
+# - move
+# - resize
+yabai -m config mouse_action1                move
+# modifier + 右键的行为
+# - move
+# - resize
+yabai -m config mouse_action2                resize
+
+# 在平铺管理情况下，拖动一个窗口到另一窗口位置时的操作
+# - swap: 交换窗口位置
+# - stack: 堆叠在旧窗口上
+yabai -m config mouse_drop_action            swap
+
+# ------------------------------------------------------------------------------------- #
+# ---------------------------general space settings------------------------------------ #
+# ------------------------------------------------------------------------------------- #
+
+# yabai 布局模式
+# - bsp: 平铺
+# - stack: 堆叠
+# - float: 浮动
+yabai -m config layout                       bsp
+# 窗口和屏幕边缘的距离（优先级低于 gap）
+yabai -m config top_padding                  05
+yabai -m config bottom_padding               05
+yabai -m config left_padding                 00
+yabai -m config right_padding                00
+# 窗口与窗口之间的间距（优先级高于 padding）
+yabai -m config window_gap                   05
+
+# ------------------------------------------------------------------------------------- #
+# ---------------------------------specific apps--------------------------------------- #
+# ------------------------------------------------------------------------------------- #
+
+# manage: 是否使用 yabai 管理
+# - on
+# - off
+# sticky: 是否总是置顶
+# - on
+# - off
+# layer:
+# - below
+# - normal
+# - above
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^System Information$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Activity Monitor$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Finder$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Feishu$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Magnet$" manage=off
+yabai -m rule --add app="^WeChat$" manage=off
+yabai -m rule --add app="^百度网盘$" manage=off
+yabai -m rule --add app="^腾讯会议$" manage=off
+yabai -m rule --add app="^瞩目国际版$" manage=off
+yabai -m rule --add app="^Email$" manage=off
+
+echo "yabai configuration loaded.."
+
+
