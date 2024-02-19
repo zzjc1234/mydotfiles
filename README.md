@@ -13,7 +13,7 @@ Install following formula (homebrew is recommended)
 - pyenv (version control of `python`)
 - ripgrep (substitute	`grep`)
 - fzf (fuzzy find)
-- ranger ()
+- ranger
 - antidote (zsh plugin manager)
 - yabai (tile desktop manager for mac)
 - skhdrc (set hot key for mac)
