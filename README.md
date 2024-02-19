@@ -14,6 +14,7 @@ Install following formula (homebrew is recommended)
 - ripgrep (substitute	`grep`)
 - fzf (fuzzy find)
 - ranger
+- btop
 - antidote (zsh plugin manager)
 - yabai (tile desktop manager for mac)
 - skhdrc (set hot key for mac)
