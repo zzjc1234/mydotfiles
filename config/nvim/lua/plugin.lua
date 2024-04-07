@@ -74,6 +74,7 @@ require("lazy").setup({
 		"neoclide/coc.nvim",
 		branch = "release",
 		lazy = false,
+		enabled = false
 	},
 	{
 		"honza/vim-snippets",
@@ -84,7 +85,43 @@ require("lazy").setup({
 
 	--Coding
 	{
-		'preservim/tagbar',
+		"williamboman/mason.nvim",
+		"williamboman/mason-lspconfig.nvim",
+		"neovim/nvim-lspconfig",
+	},
+	{
+		'hrsh7th/cmp-nvim-lsp',
+		'hrsh7th/cmp-buffer',
+		'hrsh7th/cmp-path',
+		'hrsh7th/cmp-cmdline',
+		'hrsh7th/nvim-cmp',
+		 'hrsh7th/cmp-nvim-lsp',
+		 'hrsh7th/cmp-buffer',
+		 'hrsh7th/cmp-path',
+		 'hrsh7th/cmp-cmdline',
+		 'hrsh7th/nvim-cmp',
+		 'hrsh7th/cmp-vsnip',
+		 'hrsh7th/vim-vsnip',
+		 'rafamadriz/friendly-snippets',
+		 'onsails/lspkind-nvim',
+	},
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+    config = true
+	},
+	{
+		"mfussenegger/nvim-lint"
+	},
+	{
+		"mhartington/formatter.nvim"
+	},
+	{
+		'simrat39/symbols-outline.nvim',
+	},
+	{
+		"folke/trouble.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" }
 	},
 	{
 		'folke/todo-comments.nvim',

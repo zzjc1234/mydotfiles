@@ -3,10 +3,10 @@ wk.register({
 	-- flash search
 	m = {
 		name = "flash",
-		["/"] = { function() require("flash").jump() end, "Flash Jump" },
-		t = { function() require("flash").treesitter() end, "Flash Treesitter" },
-		r = { function() require("flash").treesitter_search() end, "Flash Treesitter Search" },
-		w = { function() require("flash").jump({
+		["/"] = {mode={"n","x","o"}, function() require("flash").jump() end, "Flash Jump" },
+		t = {mode={"n","x","o"}, function() require("flash").treesitter() end, "Flash Treesitter" },
+		r = {mode={"n","x","o"}, function() require("flash").treesitter_search() end, "Flash Treesitter Search" },
+		w = {mode={"n","x","o"}, function() require("flash").jump({
 			pattern = ".", -- initialize pattern with any char
 			search = {
 				mode = function(pattern)
@@ -21,15 +21,15 @@ wk.register({
 			-- select the range
 			jump = { pos = "range" },
 		}) end, "Flash Word"},
-		l = { function() require("flash").jump({
+		l = {mode={"n","x","o"}, function() require("flash").jump({
 			search = { mode = "search", max_length = 0 },
 			label = { after = { 0, 0 } },
 			pattern = "^"
 		}) end, "Flash Line"},
-		n = { function() require("flash").jump({continue=true}) end, "Flash Next"},
-		s = { function() local Flash = require("flash")
+		n = {mode={"n","x","o"}, function() require("flash").jump({continue=true}) end, "Flash Next"},
+		s = {mode={"n","x","o"}, function() local Flash = require("flash")
 
-			---@param opts Flash.Format
+			-- @param opts Flash.Format
 			local function format(opts)
 				-- always show first and second label
 				return {

@@ -174,7 +174,7 @@ opt.encoding = 'utf8'
 api.nvim_set_keymap('v', '(', 's()<ESC>P', { noremap = true, silent=true })
 api.nvim_set_keymap('v', '[', 's[]<ESC>P', { noremap = true, silent=true })
 api.nvim_set_keymap('v', '{', 's{}<ESC>P', { noremap = true, silent=true })
-api.nvim_set_keymap('v', '<', 's<><ESC>P', { noremap = true, silent=true })
+-- api.nvim_set_keymap('v', '<', 's<><ESC>P', { noremap = true, silent=true })
 
 function surround_selected_text(Sign)
 	api.nvim_exec(string.format([[ '<,'>s/\%%V\.\*\%%V\./%s\&%s/ ]], Sign, Sign), true)

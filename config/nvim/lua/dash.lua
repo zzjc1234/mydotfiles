@@ -51,8 +51,8 @@ dashboard.section.buttons.val = {
 	dashboard.button("f", " " .. " Find file", ":Telescope find_files <CR>"),
 	dashboard.button("g", "󰷾 " .. " Find text", ":Telescope live_grep <CR>"),
 	dashboard.button("r", "󰄉 " .. " Recent files", ":Telescope oldfiles <CR>"),
-	dashboard.button("N", "󰂺 "  .. " Notes ", ":e ~/Dropbox/notes <CR>"),
-	dashboard.button("s", "󰂺 "  .. " Schedule ", ":e ~/Dropbox/org <CR>"),
+	dashboard.button("N", "󰂺 "  .. " Notes ", ":e ~/Dropbox/notes/refile.md <CR>"),
+	dashboard.button("s", "󰂺 "  .. " Schedule ", ":e ~/Dropbox/org/refile.md <CR>"),
 	dashboard.button("c", " " .. " Config", ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR><Down>"),
 	dashboard.button("q", " " .. " Quit", ":qa<CR>"),
 }
