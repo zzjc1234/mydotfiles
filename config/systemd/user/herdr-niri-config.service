@@ -1,0 +1,13 @@
+[Unit]
+Description=Herdr persistent session: niri-config
+Documentation=https://herdr.dev
+
+[Service]
+Type=simple
+WorkingDirectory=%h
+ExecStart=%h/.local/bin/herdr --session niri-config server
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+exec "$HOME/.local/bin/rofi-smart" \
+    -show drun \
+    -modi drun \
+    -theme "$HOME/.config/rofi/launchpad.rasi" \
+    "$@"

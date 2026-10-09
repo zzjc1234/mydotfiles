@@ -1,0 +1,89 @@
+configuration {
+    font: "FantasqueSansMono Nerd Font 13";
+    show-icons: false;
+    disable-history: false;
+    hide-scrollbar: true;
+    sidebar-mode: false;
+}
+
+@import "applets/styles/colors.rasi"
+
+* {
+    background-color: @background;
+    text-color: @foreground;
+}
+
+window {
+    transparency: "real";
+    border-radius: 20px;
+    location: center;
+    width: 900px;
+}
+
+entry {
+    padding: 10px;
+    background-color: @background;
+    text-color: @accent;
+    border: 0px 2px 0px 2px;
+    border-radius: 12px;
+    border-color: @accent;
+    placeholder: "type to filter";
+    placeholder-color: @foreground;
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: " Menu ";
+    background-color: @accent;
+    text-color: @background;
+    padding: 10px 10px 0px 10px;
+    border-radius: 12px;
+}
+
+inputbar {
+    children: [ textbox-prompt-colon, entry ];
+    spacing: 15px;
+    background-color: @background;
+    text-color: @foreground;
+    expand: false;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    position: center;
+}
+
+listview {
+    columns: 4;
+    lines: 2;
+    spacing: 15px;
+    cycle: true;
+    dynamic: true;
+    layout: vertical;
+}
+
+mainbox {
+    background-color: @background;
+    children: [ inputbar, listview ];
+    spacing: 15px;
+    margin: 40px;
+}
+
+element {
+    background-color: @background-light;
+    text-color: @foreground;
+    border-radius: 20px;
+    padding: 22px 18px;
+}
+
+element-text {
+    expand: true;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+}
+
+element selected {
+    background-color: @accent;
+    text-color: @background;
+    border: 0px;
+    border-radius: 20px;
+}

@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+if ! pgrep -x hyprlock >/dev/null 2>&1; then
+    "$HOME/.local/bin/lock-screen" &
+fi
+
+sleep 1
+exec "$HOME/.local/bin/power-off-monitors"

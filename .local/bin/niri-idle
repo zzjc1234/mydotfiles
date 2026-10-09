@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+
+if ! command -v swayidle >/dev/null 2>&1; then
+    exit 0
+fi
+
+if pgrep -x swayidle >/dev/null 2>&1; then
+    exit 0
+fi
+
+exec swayidle -w \
+    timeout 900 "$HOME/.local/bin/lock-and-power-off-monitors" \
+    resume "niri msg action power-on-monitors"

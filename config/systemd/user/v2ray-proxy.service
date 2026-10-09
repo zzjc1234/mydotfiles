@@ -1,0 +1,15 @@
+[Unit]
+Description=V2Ray proxy using ~/.tools/proxy/config.json
+Documentation=https://www.v2fly.org/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=V2RAY_LOCATION_ASSET=/usr/share/v2ray
+ExecStart=/usr/bin/v2ray -config %h/.tools/proxy/config.json
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

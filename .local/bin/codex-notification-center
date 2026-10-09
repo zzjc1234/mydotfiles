@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+script=${HOME}/.local/share/codex-mako-notify/codex_mako_notify.py
+
+if [ "${1-}" = "--status" ]; then
+    exec /usr/bin/python3 "$script" --center --status
+fi
+
+if pgrep -f -- '[r]ofi.*-window-title codex-notification-center' >/dev/null; then
+    exec pkill -f -- '[r]ofi.*-window-title codex-notification-center'
+fi
+
+exec /usr/bin/python3 "$script" --center

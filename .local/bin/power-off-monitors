@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+
+exec niri msg action power-off-monitors

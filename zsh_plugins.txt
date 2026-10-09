@@ -1,7 +1,9 @@
-jeffreytse/zsh-vi-mode
+zsh-users/zsh-completions
 thetic/extract
 zdharma-continuum/fast-syntax-highlighting
-zsh-users/zsh-autosuggestions
-marlonrichert/zsh-autocomplete
-valentinocossar/vscode
 romkatv/powerlevel10k
+~/.zsh/plugins/zsh-vi-mode-compat
+jeffreytse/zsh-vi-mode
+marlonrichert/zsh-autocomplete
+zsh-users/zsh-autosuggestions
+~/.zsh/plugins/zoxide

@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+exec /usr/bin/python3 ${HOME}/.local/share/codex-mako-notify/codex_mako_notify.py --action "$@"

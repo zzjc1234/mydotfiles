@@ -1,0 +1,49 @@
+#!/bin/sh
+set -eu
+
+dir="$HOME/Pictures/Screenshots"
+mkdir -p "$dir"
+
+tmp="$(mktemp --suffix=.png)"
+file="$dir/Screenshot edit from $(date '+%Y-%m-%d %H-%M-%S').png"
+cleanup() {
+    rm -f "$tmp"
+}
+trap cleanup EXIT
+
+if [ -z "${NIRI_SOCKET:-}" ] && command -v gdbus >/dev/null 2>&1; then
+    area="$(gdbus call --session \
+        --dest org.gnome.Shell.Screenshot \
+        --object-path /org/gnome/Shell/Screenshot \
+        --method org.gnome.Shell.Screenshot.SelectArea)" || exit 0
+    set -- $(printf '%s\n' "$area" | sed -E 's/int32 //g; s/[^0-9-]+/ /g')
+    [ "$#" -ge 4 ] || exit 0
+    x="$1"
+    y="$2"
+    width="$3"
+    height="$4"
+    [ "$width" -gt 0 ] && [ "$height" -gt 0 ] || exit 0
+    result="$(gdbus call --session \
+        --dest org.gnome.Shell.Screenshot \
+        --object-path /org/gnome/Shell/Screenshot \
+        --method org.gnome.Shell.Screenshot.ScreenshotArea \
+        "$x" "$y" "$width" "$height" true "$tmp")" || exit 1
+    case "$result" in
+        "(true,"*) ;;
+        *) exit 1 ;;
+    esac
+else
+    geometry="$(slurp -d -b '#11111bcc' -c '#89dcebff' -s '#89dceb33' -B '#1e1e2eff' -w 2)" || exit 0
+    [ -n "$geometry" ] || exit 0
+    grim -g "$geometry" "$tmp"
+fi
+
+[ -s "$tmp" ] || exit 0
+swappy -f "$tmp" -o "$file"
+
+if [ -s "$file" ]; then
+    wl-copy --type image/png < "$file"
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send "Screenshot edited" "$file"
+    fi
+fi

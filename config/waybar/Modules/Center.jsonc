@@ -1,0 +1,6 @@
+{
+      "modules-center":[
+        "custom/focus-timer",
+        "clock"
+      ]
+}

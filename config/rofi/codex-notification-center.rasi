@@ -1,0 +1,57 @@
+@theme "~/.config/rofi/config.rasi"
+
+* {
+    normal-background: #1e1e2ef2;
+    normal-foreground: #cdd6f4;
+    selected-normal-background: #45475a;
+    selected-normal-foreground: #cdd6f4;
+}
+
+window {
+    width: 60%;
+    height: 55%;
+    background-color: #1e1e2ef2;
+}
+
+mainbox {
+    children: [ inputbar, message, listview ];
+    background-color: #1e1e2ef2;
+}
+
+inputbar {
+    children: [ prompt, entry ];
+    background-color: #313244;
+}
+
+prompt, entry, message, element-text {
+    text-color: #cdd6f4;
+}
+
+listview {
+    columns: 1;
+    lines: 8;
+    background-color: #1e1e2e;
+}
+
+element {
+    orientation: horizontal;
+    children: [ element-text ];
+    background-color: transparent;
+}
+
+entry {
+    background-color: #313244;
+}
+
+message {
+    background-color: #1e1e2e;
+}
+
+element selected.normal {
+    background-color: #45475a;
+}
+
+element-text {
+    horizontal-align: 0;
+    background-color: transparent;
+}

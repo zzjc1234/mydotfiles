@@ -1,102 +1,60 @@
-# INFO: ZSH PLUGIN
-
-# Fix omz
-autoload -U +X compinit && compinit
-source <(kubectl completion zsh)
-compinit
-
-# Set up antidote
-source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
-antidote load ${ZDOTDIR:-$HOME}/.zsh_plugins.txt
-
-compinit
-
-autoload -Uz promptinit && promptinit
-
-eval "$(zoxide init zsh)"
-
-
-
-
-# INFO: DECORATION
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Color for man page
-source ~/.manclr
-
-
-
-
-# INFO: Alias
-
-# alias python3=/usr/local/bin/python3.10
-# alias pip=/usr/local/bin/pip3.11
-alias python=/usr/local/anaconda3/bin/python
-alias pip=/usr/local/anaconda3/bin/pip
-alias lg=lazygit
-alias rt=trash
-alias ra=ranger
-alias gcc=gcc-13
-alias g++=g++-13
-alias n=nvim
+# alias
 alias ls='lsd --group-dirs first'
 alias tree='lsd --tree'
-alias gls=/bin/ls
-alias gtree=/usr/local/bin/tree
 alias bat='bat --theme=ansi'
-alias less="bat"
-alias t="taskwarrior-tui"
-alias tk="task"
-alias s="sioyek"
+alias less='bat'
+alias lg='lazygit'
+alias codex="https_proxy=http://127.0.0.1:10870 codex"
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	command rm -f -- "$tmp"
+}
+s() { nohup sioyek "$1" > /dev/null 2>&1 & }
 
-# thefuck
-eval $(thefuck --alias)
 
-# homebrew
-export HOMEBREW_NO_AUTO_UPDATE=1
-
-
-
-
-# INFO: Conda
-
-export PATH="/usr/local/anaconda3/bin:$PATH"  # commented out by conda initialize
-export PATH="/usr/local/bin:$PATH"
-#>>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/usr/local/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/usr/local/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/usr/local/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/usr/local/anaconda3/bin:$PATH"
-				export PATH="/usr/local/anaconda3/env/bin:$PATH"
-    fi
+# antidote
+if [[ -r /usr/share/zsh-antidote/antidote.zsh ]]; then
+  source /usr/share/zsh-antidote/antidote.zsh
+elif [[ -r "${ZDOTDIR:-$HOME}/.antidote/antidote.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.antidote/antidote.zsh"
+elif [[ -r "${ZDOTDIR:-$HOME}/antidote/antidote.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/antidote/antidote.zsh"
 fi
-unset __conda_setup
-#<<< conda initialize <<<
 
+if (( $+functions[antidote] )); then
+  antidote load "${ZDOTDIR:-$HOME}/.zsh_plugins.txt"
+fi
 
-# INFO: Pyenv
+(( $+functions[__zzjc_zsh_autocomplete_rebind] )) && __zzjc_zsh_autocomplete_rebind
 
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+source ~/.p10k.zsh
 
-source ~/.tools/scripts/proxy
-source ~/.tools/scripts/pyenv
-source ~/.tools/scripts/switch
+if [[ -f "$HOME/.config/fzf/settings" ]]; then
+  source "$HOME/.config/fzf/settings"
+fi
 
-~/.tools/scripts/bg.sh &
-export PATH="/usr/local/opt/ruby/bin:$PATH"
+if (( $+commands[fzf] )); then
+  source <(fzf --zsh)
+fi
+
+### PATH
+
+# fnm
+FNM_PATH="$HOME/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "$(fnm env --shell bash)"
+fi
+
+export PATH="$HOME/.local/bin:$PATH"
+
+if (( $+commands[herdr] )); then
+  source <(herdr completion zsh)
+fi
+
+# >>> Codex installer >>>
+export PATH="$HOME/.local/bin:$PATH"
+# <<< Codex installer <<<

@@ -1,0 +1,55 @@
+#!/bin/sh
+set -eu
+
+state_file=${NIRI_SIDEBAR_STATE:-${HOME}/.cache/niri-sidebar/state.json}
+sidebar_bin=${NIRI_SIDEBAR_BIN:-niri-sidebar}
+
+[ -s "$state_file" ] || exit 0
+
+focused_window=$(
+    niri msg --json focused-window 2>/dev/null || true
+)
+
+focused_id=$(
+    printf '%s\n' "$focused_window" |
+        jq -r '.id // empty' 2>/dev/null || true
+)
+
+focused_is_floating=$(
+    printf '%s\n' "$focused_window" |
+        jq -r '.is_floating // false' 2>/dev/null || true
+)
+
+if [ -n "$focused_id" ] &&
+    jq -e --argjson id "$focused_id" '.windows[]?.id == $id' "$state_file" >/dev/null; then
+    exec niri msg action switch-focus-between-floating-and-tiling
+fi
+
+if [ -n "$focused_id" ] && [ "$focused_is_floating" = "true" ]; then
+    niri msg action switch-focus-between-floating-and-tiling >/dev/null 2>&1 || true
+
+    new_focused_id=$(
+        niri msg --json focused-window 2>/dev/null |
+            jq -r '.id // empty' 2>/dev/null || true
+    )
+
+    if [ -n "$new_focused_id" ] && [ "$new_focused_id" != "$focused_id" ]; then
+        exit 0
+    fi
+fi
+
+current_workspace=$(
+    niri msg --json workspaces |
+        jq -r '.[] | select(.is_focused) | (.name // (.idx | tostring))' |
+        sed -n '1p'
+)
+
+[ -n "$current_workspace" ] || exit 0
+
+jq -r '.windows[]?.id' "$state_file" | while IFS= read -r window_id; do
+    [ -n "$window_id" ] || continue
+    niri msg action move-window-to-workspace --window-id "$window_id" --focus false "$current_workspace" >/dev/null 2>&1 || true
+done
+
+"$sidebar_bin" reorder >/dev/null 2>&1 || true
+exec "$sidebar_bin" focus next

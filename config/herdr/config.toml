@@ -1,0 +1,4 @@
+onboarding = false
+
+[keys]
+cycle_pane_next = "prefix+tab"

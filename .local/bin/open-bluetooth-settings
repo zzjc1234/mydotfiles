@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+log=${XDG_RUNTIME_DIR:-/tmp}/open-bluetooth-settings.log
+
+if command -v blueman-manager >/dev/null 2>&1; then
+    exec blueman-manager >>"$log" 2>&1
+fi
+
+if command -v gnome-control-center >/dev/null 2>&1; then
+    exec env XDG_CURRENT_DESKTOP=GNOME DESKTOP_SESSION=gnome \
+        gnome-control-center bluetooth >>"$log" 2>&1
+fi
+
+if command -v systemsettings >/dev/null 2>&1; then
+    exec systemsettings kcm_bluetooth >>"$log" 2>&1
+fi
+
+notify-send "Bluetooth settings" "No Bluetooth settings GUI found" 2>/dev/null || true
+exit 1

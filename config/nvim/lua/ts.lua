@@ -1,53 +1,110 @@
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  -- ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
+-- ~/.config/nvim/lua/ts.lua
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
+-- filetype -> parser language 映射
+-- .tex 的 filetype 通常是 "tex"，但 parser 名是 "latex"
+vim.treesitter.language.register("latex", "tex")
+vim.treesitter.language.register("latex", "plaintex")
 
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-
-  -- List of parsers to ignore installing (or "all")
-  --ignore_install = { "javascript" },
-
-  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
-  highlight = {
-    enable = true,
-
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-    -- disable = { "c", "rust" },
-    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-    disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then return true
-        end
-    end,
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = {'org'},
-  },
-	ensure_installed= {'org'},
+local disabled_fts = {
+	-- UI / popup / dashboard buffer 不需要 treesitter
+	noice = true,
+	notify = true,
+	lazy = true,
+	mason = true,
+	snacks_dashboard = true,
+	["snacks-dashboard"] = true,
+	TelescopePrompt = true,
 }
 
--- vim.opt.foldmethod     = 'expr'
--- vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
----WORKAROUND
-vim.api.nvim_create_autocmd({'BufEnter','BufAdd','BufNew','BufNewFile','BufWinEnter'}, {
-  group = vim.api.nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
-  callback = function()
-    vim.opt.foldmethod     = 'expr'
-    vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
-  end
+local max_filesize = 100 * 1024 -- 100 KB
+
+local function is_big_file(bufnr)
+	local name = vim.api.nvim_buf_get_name(bufnr)
+	if name == "" then
+		return false
+	end
+
+	local ok, stats = pcall(vim.uv.fs_stat, name)
+	return ok and stats and stats.size > max_filesize
+end
+
+local function get_lang(bufnr)
+	local ft = vim.bo[bufnr].filetype
+	if ft == "" or disabled_fts[ft] then
+		return nil
+	end
+
+	return vim.treesitter.language.get_lang(ft) or ft
+end
+
+local function has_parser(lang)
+	if not lang or lang == "" then
+		return false
+	end
+
+	return pcall(vim.treesitter.language.add, lang)
+end
+
+local function start_treesitter(bufnr)
+	bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+	if not vim.api.nvim_buf_is_valid(bufnr) then
+		return false
+	end
+
+	if is_big_file(bufnr) then
+		return false
+	end
+
+	local lang = get_lang(bufnr)
+	if not has_parser(lang) then
+		return false
+	end
+
+	return pcall(vim.treesitter.start, bufnr, lang)
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("NativeTreesitterStart", { clear = true }),
+	callback = function(args)
+		start_treesitter(args.buf)
+
+		-- 按迁移指南：缩进要自己启用
+		-- 这里用 nvim-treesitter main 的 indentexpr；如果模块不存在就静默跳过。
+		local ok = pcall(require, "nvim-treesitter")
+		if ok then
+			vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		end
+	end,
 })
----ENDWORKAROUND
+
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+	group = vim.api.nvim_create_augroup("NativeTreesitterFold", { clear = true }),
+	callback = function(args)
+		local bufnr = args.buf
+
+		if not vim.api.nvim_buf_is_valid(bufnr) then
+			return
+		end
+
+		if not start_treesitter(bufnr) then
+			return
+		end
+
+		vim.api.nvim_set_option_value("foldmethod", "expr", {
+			scope = "local",
+			win = 0,
+		})
+
+		vim.api.nvim_set_option_value("foldexpr", "v:lua.vim.treesitter.foldexpr()", {
+			scope = "local",
+			win = 0,
+		})
+
+		-- 默认不要自动折叠，避免打开文件时全部折起来
+		vim.api.nvim_set_option_value("foldenable", false, {
+			scope = "local",
+			win = 0,
+		})
+	end,
+})

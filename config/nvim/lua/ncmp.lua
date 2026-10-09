@@ -6,22 +6,33 @@ end
 local lspkind = require("lspkind")
 local cmp = require("cmp")
 
+-- cmp.setup.filetype({ "markdown" }, {
+-- 	require("cmp_dictionary").setup({
+-- 		paths = { "~/.config/nvim/src/google-10000.txt" },
+-- 		exact_length = 2,
+-- 		first_case_insensitive = true,
+-- 	}),
+-- })
+
 cmp.setup({
 	window = {
 		completion = cmp.config.window.bordered(),
 		documentation = cmp.config.window.bordered(),
 	},
-	-- 指定 snippet 引擎
+
 	snippet = {
 		expand = function(args)
 			vim.fn["vsnip#anonymous"](args.body)
 		end,
 	},
-	-- 来源
+
 	sources = cmp.config.sources({
 		{ name = "nvim_lsp" },
 		{ name = "vsnip" },
-	}, { { name = "buffer" }, { name = "path" } }),
+	}, {
+		{ name = "buffer" },
+		{ name = "path" },
+	}),
 	mapping = {
 		["<CR>"] = cmp.mapping.confirm({
 			behavior = cmp.ConfirmBehavior.Insert,
@@ -69,13 +80,11 @@ cmp.setup({
 		end,
 	},
 
-	-- 使用lspkind-nvim显示类型图标
 	formatting = {
 		format = lspkind.cmp_format({
-			with_text = true, -- do not show text alongside icons
-			maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+			with_text = true,
+			maxwidth = 50,
 			before = function(entry, vim_item)
-				-- Source 显示提示来源
 				vim_item.menu = "[" .. string.upper(entry.source.name) .. "]"
 				return vim_item
 			end,
@@ -88,6 +97,16 @@ vim.api.nvim_set_keymap("s", "<C-j>", [[vsnip#jumpable(1) ? '<Plug>(vsnip-jump-n
 vim.api.nvim_set_keymap("i", "<C-k>", [[vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']], { expr = true })
 vim.api.nvim_set_keymap("s", "<C-k>", [[vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>']], { expr = true })
 
--- If you want insert `(` after select function or method item
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+--
+-- cmp.setup.filetype({ "markdown", "latex" }, {
+-- 	sources = cmp.config.sources({
+-- 		{ name = "nvim_lsp" },
+-- 		{ name = "vsnip" },
+-- 		{ name = "dictionary", keyword_length = 2 }, -- Dictionary only for markdown and LaTeX
+-- 	}, {
+-- 		{ name = "buffer" },
+-- 		{ name = "path" },
+-- 	}),
+-- })

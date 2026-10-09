@@ -1,1 +1,28 @@
 **/.DS_Store
+**/__pycache__/
+**/*.py[cod]
+**/*.log
+**/*.bak
+**/target/
+
+# Runtime state and machine-local databases
+config/dconf/user
+config/fcitx/dbus/
+config/fcitx5/conf/cached_layouts
+config/herdr/release-notes.json
+config/herdr/session.json
+config/herdr/sessions/
+config/QtProject.conf
+
+# Historical snapshots and nested package-manager checkouts
+config/niri/backups/
+config/nvim/backups/
+config/tmux/plugins/tpm/
+.local/share/niri/*.before-*
+
+# Machine-local state copied alongside configuration
+/docs/superpowers/
+/config/gtk-3.0/bookmarks
+/config/systemd/user/default.target.wants/snap.*
+/config/systemd/user/timers.target.wants/snap.*
+/config/systemd/user/graphical-session.target.wants/upgrade-restore-font.service

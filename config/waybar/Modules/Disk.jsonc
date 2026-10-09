@@ -1,0 +1,12 @@
+{
+  "disk": {
+    "interval": 30,
+    "format": "󰋊  {percentage_used}%",
+    "format-alt": "󰋊  {used} / {total}",
+    "path": "/",
+    "tooltip": true,
+    "tooltip-format": "{used} is used out of {total}\nCurrently free storage is {free} ({percentage_free}%)",
+    "on-click-right": "kitty --class disk sh -lc 'df -h /; printf \"\\nPress enter to close...\"; read -r _'"
+  }
+
+}

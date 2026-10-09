@@ -1,0 +1,79 @@
+#!/bin/sh
+set -eu
+
+scratchpad=${NIRI_SCRATCHPAD_BIN:-niri-scratchpad}
+niri=${NIRI_BIN:-niri}
+lock=${NIRI_SCRATCHPAD_LOCK:-${XDG_RUNTIME_DIR:-/tmp}/niri-scratchpad-register-1.lock}
+if [ "${1:-}" = --locked ]; then
+    locked=true
+    mode=${2:-centered}
+else
+    locked=false
+    mode=${1:-centered}
+fi
+
+case "$mode" in
+    centered|tiled|delete) ;;
+    *) printf 'usage: %s [centered|tiled|delete]\n' "$0" >&2; exit 2 ;;
+esac
+
+if [ "$locked" = false ]; then
+    exec flock --exclusive --close "$lock" "$0" --locked "$mode"
+fi
+
+"$scratchpad" sync >/dev/null 2>&1
+
+if [ "$mode" = delete ]; then
+    exec "$scratchpad" delete 1
+fi
+
+registered_title=
+registered_app_id=
+title_ok=false
+app_id_ok=false
+target_id=
+
+if registered_title=$("$scratchpad" get 1 title 2>/dev/null); then
+    title_ok=true
+fi
+if registered_app_id=$("$scratchpad" get 1 appid 2>/dev/null); then
+    app_id_ok=true
+fi
+
+if [ "$title_ok" = true ] && [ "$app_id_ok" = true ]; then
+    if [ -n "$registered_title" ] && [ -n "$registered_app_id" ]; then
+        if windows=$("$niri" msg -j windows); then
+            target_id=$(printf '%s\n' "$windows" | jq -r \
+                --arg title "$registered_title" \
+                --arg app_id "$registered_app_id" \
+                '[.[] | select((.title // "") == $title and (.app_id // "") == $app_id)]
+                 | if length == 1 then (.[0].id // empty) else empty end' \
+                2>/dev/null) || target_id=
+        fi
+    elif [ -z "$registered_title" ] && [ -z "$registered_app_id" ]; then
+        if focused_before=$("$niri" msg -j focused-window); then
+            target_id=$(printf '%s\n' "$focused_before" | jq -r '.id // empty' 2>/dev/null) || target_id=
+        fi
+    fi
+fi
+
+case "$mode" in
+    centered) "$scratchpad" create 1 --as-float ;;
+    tiled) "$scratchpad" create 1 ;;
+esac
+
+focused=$("$niri" msg -j focused-window) || exit 0
+focused_id=$(printf '%s\n' "$focused" | jq -r '.id // empty' 2>/dev/null) || exit 0
+
+[ -n "$target_id" ] || exit 0
+[ -n "$focused_id" ] || exit 0
+[ "$focused_id" = "$target_id" ] || exit 0
+
+if [ "$mode" = tiled ]; then
+    "$niri" msg action move-window-to-tiling --id "$target_id"
+else
+    "$niri" msg action move-window-to-floating --id "$target_id"
+    "$niri" msg action set-window-width --id "$target_id" 60%
+    "$niri" msg action set-window-height --id "$target_id" 60%
+    "$niri" msg action move-floating-window --id "$target_id" -x 20% -y 20%
+fi

@@ -1,0 +1,24 @@
+{
+  "modules-right": [
+        "custom/power",
+	      "custom/codex-notifications",
+	      "temperature",
+        "cpu",
+        "memory",
+        "disk",
+        "bluetooth",
+        "network",
+        "pulseaudio",
+        "backlight",
+        "battery"
+    ],
+
+  "custom/codex-notifications": {
+    "exec": "codex-notification-center --status",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 8,
+    "on-click": "codex-notification-center"
+  }
+
+}

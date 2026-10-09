@@ -1,0 +1,14 @@
+{
+  "network": {
+        "interval": 1,
+        "format-disabled": "    OFF",
+        "format-wifi": "    {essid}",
+        "format-alt": " {bandwidthUpBytes}   {bandwidthDownBytes}",
+        "tooltip-format-wifi": "You are connected to {essid} ({signalStrength}%)",
+        "format-disconnected": "   No internet",
+        "on-click": "open-network-settings",
+        "on-click-right": "open-network-settings",
+        "on-click-middle": "rfkill toggle wifi"
+    }
+
+}

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Rofi's Wayland backend uses layer-shell. In niri, that is the right path for
+# launchers because overlay layers follow the focused workspace. Keep the old
+# XWayland fallback available for compositors or themes that need it.
+if [ "${ROFI_USE_XWAYLAND:-0}" = 1 ] && [ -n "${DISPLAY:-}" ]; then
+    unset WAYLAND_DISPLAY
+elif [ "${ROFI_USE_WAYLAND:-0}" != 1 ] && [ -n "${DISPLAY:-}" ]; then
+    case "${XDG_CURRENT_DESKTOP:-}:${DESKTOP_SESSION:-}" in
+        *niri*|*Niri*|*NIRI*) ;;
+        *) unset WAYLAND_DISPLAY ;;
+    esac
+fi
+
+exec /usr/bin/rofi "$@"

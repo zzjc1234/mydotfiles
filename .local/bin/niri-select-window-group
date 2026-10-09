@@ -1,0 +1,95 @@
+#!/bin/sh
+set -eu
+
+state_dir="${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}/niri"
+state="$state_dir/selected-windows"
+mkdir -p "$state_dir"
+touch "$state"
+
+notify() {
+    command -v notify-send >/dev/null 2>&1 || return 0
+    notify-send --app-name=niri --expire-time=1500 "$1" "$2" >/dev/null 2>&1 || :
+}
+
+windows=$(niri msg -j windows)
+
+case "${1:-}" in
+    toggle)
+        id=$(printf '%s' "$windows" | jq -r '.[] | select(.is_focused) | .id' | head -n 1)
+        [ -n "$id" ] || exit 0
+
+        if grep -Fxq "$id" "$state"; then
+            sed -i "/^${id}$/d" "$state"
+            niri msg action unset-window-urgent --id "$id" >/dev/null
+            notify "窗口组" "已取消选择（剩余 $(wc -l < "$state") 个）"
+        else
+            printf '%s\n' "$id" >> "$state"
+            title=$(printf '%s' "$windows" | jq -r --arg id "$id" '.[] | select((.id | tostring) == $id) | .title' | head -n 1)
+            niri msg action set-window-urgent --id "$id" >/dev/null
+            notify "窗口组" "已选择：$title（共 $(wc -l < "$state") 个）"
+        fi
+        ;;
+
+    move)
+        target=${2:?missing workspace}
+        moved=0
+
+        # Preserve the original Super+Shift+number behavior when no group is selected.
+        if [ ! -s "$state" ]; then
+            niri msg action move-column-to-workspace "$target" >/dev/null
+            exit 0
+        fi
+
+        while IFS= read -r id; do
+            [ -n "$id" ] || continue
+            if printf '%s' "$windows" | jq -e --arg id "$id" 'any(.[]; (.id | tostring) == $id)' >/dev/null; then
+                niri msg action move-window-to-workspace "$target" --window-id "$id" --focus=false >/dev/null
+                niri msg action unset-window-urgent --id "$id" >/dev/null
+                moved=$((moved + 1))
+            fi
+        done < "$state"
+
+        : > "$state"
+        if [ "$moved" -gt 0 ]; then
+            niri msg action focus-workspace "$target" >/dev/null
+            notify "窗口组" "已将 $moved 个窗口发送到 $target"
+        else
+            notify "窗口组" "没有已选择的窗口"
+        fi
+        ;;
+
+    resize)
+        change=${2:?missing width change}
+        resized=0
+
+        # Preserve the original Super+-/= behavior when no group is selected.
+        if [ ! -s "$state" ]; then
+            niri msg action set-column-width "$change" >/dev/null
+            exit 0
+        fi
+
+        while IFS= read -r id; do
+            [ -n "$id" ] || continue
+            if printf '%s' "$windows" | jq -e --arg id "$id" 'any(.[]; (.id | tostring) == $id)' >/dev/null; then
+                niri msg action set-window-width "$change" --id "$id" >/dev/null
+                resized=$((resized + 1))
+            fi
+        done < "$state"
+
+        [ "$resized" -gt 0 ] && notify "窗口组" "已调整 $resized 个窗口：$change"
+        ;;
+
+    clear)
+        while IFS= read -r id; do
+            [ -n "$id" ] || continue
+            niri msg action unset-window-urgent --id "$id" >/dev/null 2>&1 || :
+        done < "$state"
+        : > "$state"
+        notify "窗口组" "已清除选择"
+        ;;
+
+    *)
+        echo "usage: $0 {toggle|move WORKSPACE|resize CHANGE|clear}" >&2
+        exit 2
+        ;;
+esac

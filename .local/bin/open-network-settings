@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+log=${XDG_RUNTIME_DIR:-/tmp}/open-network-settings.log
+
+if command -v gnome-control-center >/dev/null 2>&1; then
+    exec env XDG_CURRENT_DESKTOP=GNOME DESKTOP_SESSION=gnome \
+        gnome-control-center wifi >>"$log" 2>&1
+fi
+
+if command -v nm-connection-editor >/dev/null 2>&1; then
+    exec nm-connection-editor >>"$log" 2>&1
+fi
+
+if command -v systemsettings >/dev/null 2>&1; then
+    exec systemsettings kcm_networkmanagement >>"$log" 2>&1
+fi
+
+notify-send "Network settings" "No network settings GUI found" 2>/dev/null || true
+exit 1

@@ -1,0 +1,10 @@
+{
+  "custom/power": {
+        "format" : "",
+        "tooltip": true,
+        "tooltip-format": "Power menu",
+        "on-click": "pkill rofi || rofi-power-menu",
+        "on-click-right": "lock-screen",
+        "on-click-middle": "power-off-monitors"
+   }
+}

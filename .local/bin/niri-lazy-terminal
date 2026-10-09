@@ -1,0 +1,44 @@
+#!/bin/sh
+set -eu
+
+target_workspace="1: terminal"
+kitty_cmd="${HOME}/.local/bin/kitty"
+last_workspace=""
+
+focused_workspace() {
+    niri msg -j workspaces 2>/dev/null |
+        jq -r 'map(select(.is_focused))[0] // map(select(.is_active))[0] // empty | [.id, (.name // "")] | @tsv'
+}
+
+workspace_has_kitty() {
+    workspace_id="$1"
+    niri msg -j windows 2>/dev/null |
+        jq -e --argjson workspace_id "$workspace_id" '
+            any(.[]; .workspace_id == $workspace_id and ((.app_id // "") | ascii_downcase) == "kitty")
+        ' >/dev/null
+}
+
+maybe_spawn_kitty() {
+    workspace="$(focused_workspace || true)"
+    [ -n "$workspace" ] || return 0
+
+    workspace_id="${workspace%%	*}"
+    workspace_name="${workspace#*	}"
+
+    if [ "$workspace_name" = "$target_workspace" ] && [ "$last_workspace" != "$target_workspace" ]; then
+        if ! workspace_has_kitty "$workspace_id"; then
+            niri msg action spawn -- "$kitty_cmd" >/dev/null 2>&1 || true
+        fi
+    fi
+
+    last_workspace="$workspace_name"
+}
+
+maybe_spawn_kitty
+
+niri msg -j event-stream 2>/dev/null |
+    while IFS= read -r event; do
+        case "$event" in
+            *WorkspacesChanged*) maybe_spawn_kitty ;;
+        esac
+    done

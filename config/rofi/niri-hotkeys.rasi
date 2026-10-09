@@ -1,0 +1,88 @@
+configuration {
+    font: "FantasqueSansMono Nerd Font 13";
+    show-icons: false;
+    disable-history: false;
+    hide-scrollbar: false;
+    sidebar-mode: false;
+    matching: "fuzzy";
+    sort: true;
+    cycle: true;
+}
+
+@import "applets/styles/colors.rasi"
+
+* {
+    background-color: @background;
+    text-color: @foreground;
+}
+
+window {
+    transparency: "real";
+    border-radius: 14px;
+    location: center;
+    width: 1080px;
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: " Hotkeys ";
+    background-color: @accent;
+    text-color: @background;
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+entry {
+    padding: 10px 12px;
+    background-color: @background;
+    text-color: @accent;
+    border: 0px 0px 2px 0px;
+    border-color: @accent;
+    placeholder: "type to filter";
+    placeholder-color: @foreground;
+}
+
+inputbar {
+    children: [ textbox-prompt-colon, entry ];
+    spacing: 14px;
+    background-color: @background;
+    text-color: @foreground;
+    expand: false;
+    margin: 0px;
+    padding: 0px;
+}
+
+mainbox {
+    background-color: @background;
+    children: [ inputbar, listview ];
+    spacing: 14px;
+    margin: 24px;
+}
+
+listview {
+    columns: 1;
+    lines: 18;
+    spacing: 6px;
+    cycle: true;
+    dynamic: true;
+    layout: vertical;
+    fixed-height: false;
+}
+
+element {
+    background-color: @background-light;
+    text-color: @foreground;
+    border-radius: 8px;
+    padding: 9px 12px;
+}
+
+element-text {
+    expand: true;
+    horizontal-align: 0;
+    vertical-align: 0.5;
+}
+
+element selected {
+    background-color: @accent;
+    text-color: @background;
+}

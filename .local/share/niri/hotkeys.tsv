@@ -1,0 +1,119 @@
+# category	key	title	command
+Help	Mod+Shift+Slash	Search Hotkeys / Show Native Overlay	niri msg action show-hotkey-overlay
+Apps	Super+Shift+Return	Open Terminal: kitty	kitty
+Apps	Mod+D	Open BlackSparkz rofi launchpad	rofi-launchpad
+Apps	Super+Space	Open rofi menu	rofi-menu
+Apps	Super+Shift+G	Open Google Chrome	google-chrome
+Apps	Super+Alt+V	Clipboard History: BlackSparkz rofi	rofi-clipboard
+System	Super+Alt+L	Lock the Screen: swaylock	swaylock
+System	Super+Alt+S	Toggle screen reader	pkill orca || exec orca
+System	Super+N	Notification: Invoke Default Action	makoctl invoke
+System	Super+Shift+N	Notification: Dismiss Latest	makoctl dismiss
+Timer	Super+Alt+T	Focus Timer: New Countdown	focus-timer prompt
+Timer	Super+Alt+P	Focus Timer: Pause	focus-timer pause
+Timer	Super+Alt+G	Focus Timer: Resume	focus-timer resume
+Timer	Super+Alt+X	Focus Timer: Cancel	focus-timer cancel
+Timer	Super+Alt+I	Focus Timer: Show Large Card	focus-timer status
+Timer	Super+Alt+Y	Focus Timer: Toggle Card / Waybar	focus-timer status-toggle
+Tools	Mod+S	Sidebar: Toggle Window	niri-sidebar toggle-window
+Tools	Mod+Shift+S	Sidebar: Hide or Show	niri-sidebar toggle-visibility
+Tools	Mod+Ctrl+S	Sidebar: Flip Side	niri-sidebar flip
+Tools	Mod+Alt+R	Sidebar: Reorder	niri-sidebar reorder
+Tools	Mod+Tab	Sidebar: Focus or Return to Tiling	niri-sidebar-focus-toggle
+Tools	Mod+Shift+Tab	Sidebar: Focus Previous	niri-sidebar focus prev
+Tools	Mod+Z	Scratchpad: Toggle Register 1	niri-scratchpad create 1
+Tools	Mod+Shift+Z	Scratchpad: Toggle Register 1 Floating	niri-scratchpad create 1 --as-float
+Tools	Mod+Ctrl+Z	Scratchpad: Delete Register 1	niri-scratchpad delete 1
+Media	XF86AudioRaiseVolume	Volume Up	wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0
+Media	XF86AudioLowerVolume	Volume Down	wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-
+Media	XF86AudioMute	Toggle Audio Mute	wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+Media	XF86AudioMicMute	Toggle Mic Mute	wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+Media	XF86AudioPlay	Play / Pause	playerctl play-pause
+Media	XF86AudioStop	Stop	playerctl stop
+Media	XF86AudioPrev	Previous Track	playerctl previous
+Media	XF86AudioNext	Next Track	playerctl next
+Media	XF86MonBrightnessUp	Brightness Up	brightnessctl --class=backlight set +10%
+Media	XF86MonBrightnessDown	Brightness Down	brightnessctl --class=backlight set 10%-
+Windows	Mod+O	Toggle Overview	niri msg action toggle-overview
+Windows	Mod+Q	Close Window	niri msg action close-window
+Windows	Ctrl+Alt+BackSpace	Close Window	niri msg action close-window
+Windows	Super+H	Focus Left	niri msg action focus-column-left
+Windows	Super+J	Focus Down	niri msg action focus-window-down
+Windows	Super+K	Focus Up	niri msg action focus-window-up
+Windows	Super+L	Focus Right	niri msg action focus-column-right
+Windows	Super+Ctrl+H	Move Left	niri msg action move-column-left
+Windows	Super+Ctrl+J	Move Down	niri msg action move-window-down
+Windows	Super+Ctrl+K	Move Up	niri msg action move-window-up
+Windows	Super+Ctrl+L	Move Right	niri msg action move-column-right
+Windows	Alt+Shift+H	Move Left	niri msg action move-column-left
+Windows	Alt+Shift+J	Move Down	niri msg action move-window-down
+Windows	Alt+Shift+K	Move Up	niri msg action move-window-up
+Windows	Alt+Shift+L	Move Right	niri msg action move-column-right
+Monitors	Super+Alt+Left	Focus Monitor Left	niri msg action focus-monitor-left
+Monitors	Super+Alt+Down	Focus Monitor Down	niri msg action focus-monitor-down
+Monitors	Super+Alt+Up	Focus Monitor Up	niri msg action focus-monitor-up
+Monitors	Super+Alt+Right	Focus Monitor Right	niri msg action focus-monitor-right
+Monitors	Mod+Shift+Ctrl+H	Move Column to Monitor Left	niri msg action move-column-to-monitor-left
+Monitors	Mod+Shift+Ctrl+J	Move Column to Monitor Down	niri msg action move-column-to-monitor-down
+Monitors	Mod+Shift+Ctrl+K	Move Column to Monitor Up	niri msg action move-column-to-monitor-up
+Monitors	Mod+Shift+Ctrl+L	Move Column to Monitor Right	niri msg action move-column-to-monitor-right
+Workspaces	Super+1	Focus 1: terminal	niri msg action focus-workspace '1: terminal'
+Workspaces	Super+2	Focus 2: chat	niri msg action focus-workspace '2: chat'
+Workspaces	Super+3	Focus 3: browser	niri msg action focus-workspace '3: browser'
+Workspaces	Super+4	Focus 4: paper	niri msg action focus-workspace '4: paper'
+Workspaces	Super+5	Focus 5: agent	niri msg action focus-workspace '5: agent'
+Workspaces	Super+6	Focus 6: orchestrator	niri msg action focus-workspace '6: orchestrator'
+Workspaces	Super+7	Focus 7: file	niri msg action focus-workspace '7: file'
+Workspaces	Super+8	Focus 8: misc0	niri msg action focus-workspace '8: misc0'
+Workspaces	Super+9	Focus 9: misc1	niri msg action focus-workspace '9: misc1'
+Workspaces	Super+Shift+1	Move Column to 1: terminal	niri msg action move-column-to-workspace '1: terminal'
+Workspaces	Super+Shift+2	Move Column to 2: chat	niri msg action move-column-to-workspace '2: chat'
+Workspaces	Super+Shift+3	Move Column to 3: browser	niri msg action move-column-to-workspace '3: browser'
+Workspaces	Super+Shift+4	Move Column to 4: paper	niri msg action move-column-to-workspace '4: paper'
+Workspaces	Super+Shift+5	Move Column to 5: agent	niri msg action move-column-to-workspace '5: agent'
+Workspaces	Super+Shift+6	Move Column to 6: orchestrator	niri msg action move-column-to-workspace '6: orchestrator'
+Workspaces	Super+Shift+7	Move Column to 7: file	niri msg action move-column-to-workspace '7: file'
+Workspaces	Super+Shift+8	Move Column to 8: misc0	niri msg action move-column-to-workspace '8: misc0'
+Workspaces	Super+Shift+9	Move Column to 9: misc1	niri msg action move-column-to-workspace '9: misc1'
+Workspaces	Ctrl+Shift+1	Move Column and Focus 1: terminal	niri msg action move-column-to-workspace '1: terminal' && niri msg action focus-workspace '1: terminal'
+Workspaces	Ctrl+Shift+2	Move Column and Focus 2: chat	niri msg action move-column-to-workspace '2: chat' && niri msg action focus-workspace '2: chat'
+Workspaces	Ctrl+Shift+3	Move Column and Focus 3: browser	niri msg action move-column-to-workspace '3: browser' && niri msg action focus-workspace '3: browser'
+Workspaces	Ctrl+Shift+4	Move Column and Focus 4: paper	niri msg action move-column-to-workspace '4: paper' && niri msg action focus-workspace '4: paper'
+Workspaces	Ctrl+Shift+5	Move Column and Focus 5: agent	niri msg action move-column-to-workspace '5: agent' && niri msg action focus-workspace '5: agent'
+Workspaces	Ctrl+Shift+6	Move Column and Focus 6: orchestrator	niri msg action move-column-to-workspace '6: orchestrator' && niri msg action focus-workspace '6: orchestrator'
+Workspaces	Ctrl+Shift+7	Move Column and Focus 7: file	niri msg action move-column-to-workspace '7: file' && niri msg action focus-workspace '7: file'
+Workspaces	Ctrl+Shift+8	Move Column and Focus 8: misc0	niri msg action move-column-to-workspace '8: misc0' && niri msg action focus-workspace '8: misc0'
+Workspaces	Ctrl+Shift+9	Move Column and Focus 9: misc1	niri msg action move-column-to-workspace '9: misc1' && niri msg action focus-workspace '9: misc1'
+Workspaces	Mod+Delete	Delete Current Workspace Name	niri msg action unset-workspace-name
+Layout	Mod+BracketLeft	Consume or Expel Window Left	niri msg action consume-or-expel-window-left
+Layout	Mod+BracketRight	Consume or Expel Window Right	niri msg action consume-or-expel-window-right
+Layout	Mod+Comma	Consume Window Into Column	niri msg action consume-window-into-column
+Layout	Mod+Period	Expel Window From Column	niri msg action expel-window-from-column
+Layout	Mod+R	Switch Preset Column Width	niri msg action switch-preset-column-width
+Layout	Mod+Shift+R	Switch Preset Column Width Back	niri msg action switch-preset-column-width-back
+Layout	Mod+Ctrl+Shift+R	Switch Preset Window Height	niri msg action switch-preset-window-height
+Layout	Mod+Ctrl+R	Reset Window Height	niri msg action reset-window-height
+Layout	Mod+F	Maximize Column	niri msg action maximize-column
+Layout	Mod+Shift+F	Fullscreen Window	niri msg action fullscreen-window
+Layout	Mod+M	Maximize Window to Edges	niri msg action maximize-window-to-edges
+Layout	Mod+Ctrl+F	Expand Column to Available Width	niri msg action expand-column-to-available-width
+Layout	Mod+C	Center Column	niri msg action center-column
+Layout	Mod+Ctrl+C	Center Visible Columns	niri msg action center-visible-columns
+Layout	Super+Shift+H	Resize Narrower	niri msg action set-column-width '-10%'
+Layout	Super+Shift+L	Resize Wider	niri msg action set-column-width '+10%'
+Layout	Super+Shift+K	Resize Shorter	niri msg action set-window-height '-10%'
+Layout	Super+Shift+J	Resize Taller	niri msg action set-window-height '+10%'
+Layout	Mod+W	Toggle Column Tabbed Display	niri msg action toggle-column-tabbed-display
+Windows	Mod+V	Toggle Window Floating	niri msg action toggle-window-floating
+Windows	Mod+Shift+V	Switch Floating / Tiling Focus	niri msg action switch-focus-between-floating-and-tiling
+Windows	Ctrl+Alt+Space	Toggle Window Floating	niri msg action toggle-window-floating
+Windows	Ctrl+Alt+Return	Fullscreen Window	niri msg action fullscreen-window
+Screenshots	Print	Screenshot	niri msg action screenshot
+Screenshots	Ctrl+Print	Screenshot Screen	niri msg action screenshot-screen
+Screenshots	Alt+Print	Screenshot Window	niri msg action screenshot-window
+Screenshots	Alt+A	Screenshot Area	screenshot-area
+Screenshots	Alt+Shift+A	Screenshot Full Screen	screenshot-full
+System	Mod+Escape	Toggle Keyboard Shortcuts Inhibit	niri msg action toggle-keyboard-shortcuts-inhibit
+System	Mod+Shift+E	Quit niri	niri msg action quit
+System	Ctrl+Alt+Delete	Quit niri	niri msg action quit
+System	Mod+Shift+P	Power Off Monitors	niri msg action power-off-monitors

@@ -1,0 +1,204 @@
+* {
+    font-family: "Google Sans Flex", "Google Sans Code NF", "Iosevka Nerd Font", "FantasqueSansMono Nerd Font", "Hurmit Nerd Font Mono", "FontAwesome", sans-serif;
+    font-size: 16px;
+    padding: 0px 2px 0px 2px;
+}
+
+window#waybar {
+    background-color: rgba(00, 00, 00, 0.4);
+    color: white;
+    border-radius: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+#workspaces button {
+    color: white;
+    border-radius: 8px;
+    min-width: 36px;
+    padding: 0px 8px;
+    margin: 0px 2px;
+    background-color: transparent;
+}
+
+#workspaces button.focused,
+#workspaces button.active {
+    transition: all 0.2s ease-in-out;
+    color: #11111b;
+    background-color: #89dceb;
+    border-radius: 8px;
+}
+
+#workspaces button:hover {
+    color: black;
+    background-color: rgba(255, 255, 255, 0.55);
+}
+
+#workspaces button#niri-workspace-stash,
+#workspaces button#niri-workspace-10,
+#workspaces button#niri-workspace-11,
+#workspaces button#niri-workspace-12 {
+    min-width: 0px;
+    padding: 0px;
+    margin: 0px;
+    opacity: 0;
+}
+
+#backlight:hover,
+#pulseaudio:hover {
+    background-color: #5962ff;
+    transition: all 0.2s ease-in-out;
+}
+
+tooltip {
+  border-radius: 32px;
+  transition: all 0.2s ease-in-out;
+}
+
+tooltip label {
+  color: white;
+  transition: all 0.2s ease-in-out;
+  padding: 12px 20px 12px 20px;
+}
+
+#workspaces,
+#temperature,
+#temperature.warning,
+#temperature.critical,
+#battery.critical:not(.charging),
+#battery.warning:not(.charging),
+#battery.charging,
+#battery.plugged,
+#battery.full,
+#custom-logo,
+#custom-power,
+#mpris,
+#pulseaudio.muted,
+#pulseaudio,
+#bluetooth,
+#network,
+#network.disconnected,
+#backlight,
+#battery,
+#network.disconnected,
+#cpu,
+#tray,
+#memory,
+#disk,
+#clock {
+background-color: rgba(255, 255, 255, 0.1);
+transition: all 0.2s ease-in-out;
+color: white;
+border-radius: 32px;
+padding: 1px 12px 0px 12px;
+margin: 4px 0px 4px 0px;
+}
+
+#workspaces {
+padding: 0px 4px 0px 4px;
+}
+
+.niri-workspaces {
+background-color: rgba(255, 255, 255, 0.1);
+transition: all 0.2s ease-in-out;
+color: white;
+border-radius: 32px;
+padding: 1px 8px 0px 8px;
+margin: 4px 0px 4px 0px;
+}
+
+.niri-workspaces .current-workspace-icons {
+padding: 0px;
+}
+
+.niri-workspaces button {
+background-color: transparent;
+border: none;
+border-radius: 8px;
+padding: 0px 4px;
+margin: 0px 1px;
+}
+
+.niri-workspaces button.focused {
+background-color: #89dceb;
+}
+
+#battery.charging,
+#battery.plugged {
+background-color: #00aa01;
+}
+
+@keyframes blink {
+    to {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+}
+
+#battery.critical:not(.charging),
+#temperature.critical {
+background-color: #FF0000;
+animation-name: blink;
+animation-duration: 1.0s;
+animation-timing-function: steps(20);
+animation-iteration-count: infinite;
+animation-direction: alternate;
+}
+
+#battery.warning:not(.charging),
+#temperature.warning {
+background-color: #FF7300;
+}
+
+#battery.full {
+background-color: #5962ff;
+}
+
+#custom-power {
+padding: 1px 16px 0px 12px;
+}
+
+#custom-focus-timer {
+background-color: #89dceb;
+color: #11111b;
+font-weight: 700;
+border-radius: 32px;
+padding: 1px 16px 0px 16px;
+margin: 4px 0px 4px 0px;
+}
+
+#custom-focus-timer.paused {
+background-color: #f9e2af;
+}
+
+#network.disconnected,
+#pulseaudio.muted {
+background-color: #f2000e;
+}
+
+#custom-codex-notifications.pending {
+background-color: #f9e2af;
+color: #11111b;
+border-radius: 32px;
+padding: 1px 12px 0px 12px;
+margin: 4px 0px 4px 0px;
+}
+
+#custom-codex-notifications.pending:hover {
+background-color: #fab387;
+}
+
+#custom-codex-notifications.idle,
+#custom-codex-notifications.waiting {
+background-color: rgba(255, 255, 255, 0.1);
+color: white;
+border-radius: 32px;
+padding: 1px 12px 0px 12px;
+margin: 4px 0px 4px 0px;
+}
+
+#custom-codex-notifications.idle:hover,
+#custom-codex-notifications.waiting:hover {
+background-color: rgba(255, 255, 255, 0.55);
+color: black;
+}

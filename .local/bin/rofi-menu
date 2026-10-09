@@ -1,0 +1,47 @@
+#!/bin/sh
+
+rofi_cmd="$HOME/.local/bin/rofi-smart -dmenu -i -p Menu -theme $HOME/.config/rofi/clipboard.rasi"
+
+choice="$(printf '%s\n' \
+    "  Apps" \
+    "  Terminal" \
+    "  Browser" \
+    "  Files" \
+    "  Network" \
+    "  Clipboard" \
+    "  Screenshot" \
+    "  Power" | $rofi_cmd)"
+
+case "$choice" in
+    *Apps)
+        exec "$HOME/.local/bin/rofi-launchpad"
+        ;;
+    *Terminal)
+        exec kitty
+        ;;
+    *Browser)
+        if command -v google-chrome >/dev/null 2>&1; then
+            exec google-chrome
+        else
+            exec firefox
+        fi
+        ;;
+    *Files)
+        exec nautilus
+        ;;
+    *Network)
+        exec "$HOME/.local/bin/open-network-settings"
+        ;;
+    *Clipboard)
+        exec "$HOME/.local/bin/rofi-clipboard"
+        ;;
+    *Screenshot)
+        if niri msg action screenshot >/dev/null 2>&1; then
+            exit 0
+        fi
+        grim -g "$(slurp)" "$HOME/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png"
+        ;;
+    *Power)
+        exec "$HOME/.local/bin/rofi-power-menu"
+        ;;
+esac

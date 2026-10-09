@@ -1,0 +1,8 @@
+{
+  "clock": {
+    "interval": 1,
+    "tooltip": false,
+    "format": "It's {:%H:%M:%S}",
+    "format-alt": "It’s {:%H:%M:%S on %A, %d %B %Y}"
+    }
+}

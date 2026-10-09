@@ -1,0 +1,56 @@
+{
+  "layer": "top",
+  "position": "top",
+  "spacing": 6,
+  "reload_style_on_change": true,
+
+  "modules-left":[
+    "custom/logo",
+    "mpris",
+    "tray",
+    "niri/workspaces",
+    "cffi/niri_workspaces"
+  ],
+
+  "custom/logo": {
+    "format" : "󰣇   Niri",
+    "tooltip": false,
+    "tooltip-format": "App launcher",
+    "on-click": "pkill rofi || rofi-launchpad",
+    "on-click-right": "kitty",
+    "on-click-middle": "niri msg action close-window",
+    "on-scroll-up": "niri msg action focus-column-left",
+    "on-scroll-down": "niri msg action focus-column-right"
+  },
+
+  "niri/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "1: terminal": "1 ",
+      "2: chat": "2 󰭹",
+      "3: browser": "3 ",
+      "4: paper": "4 󰈙",
+      "5: agent": "5 󰚩",
+      "6: orchestrator": "6 󰒓",
+      "7: file": "7 ",
+      "8: misc0": "8 󰋼",
+      "9: misc1": "9 󰋽",
+      "stash": "",
+      "default": ""
+    },
+    "on-click-middle": "niri msg action maximize-column",
+    "on-scroll-up": "niri msg action focus-workspace-up",
+    "on-scroll-down": "niri msg action focus-workspace-down"
+  },
+
+  "cffi/niri_workspaces": {
+    "module_path": ".config/waybar/modules/libwaybar_niri_workspaces.so",
+    "only_current_workspace": false,
+    "show_workspace_list": false,
+    "icon_size": 18
+  },
+
+  "include": [
+    "~/.config/waybar/Modules/*.jsonc"
+  ]
+}

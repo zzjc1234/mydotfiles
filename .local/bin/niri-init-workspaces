@@ -1,0 +1,42 @@
+#!/bin/sh
+set -eu
+
+wait_for_niri() {
+    i=0
+    while [ "$i" -lt 100 ]; do
+        if niri msg workspaces >/dev/null 2>&1; then
+            return 0
+        fi
+        i=$((i + 1))
+        sleep 0.1
+    done
+    return 1
+}
+
+spawn_startup_apps() {
+    niri msg action spawn -- /usr/bin/google-chrome >/dev/null 2>&1 || true
+    niri msg action spawn -- ${HOME}/Downloads/Zotero-9.0.6_linux-x86_64/Zotero_linux-x86_64/zotero >/dev/null 2>&1 || true
+}
+
+order_workspaces() {
+    niri msg action move-workspace-to-index --reference "1: terminal" 1 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "2: chat" 2 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "3: browser" 3 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "4: paper" 4 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "5: agent" 5 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "6: orchestrator" 6 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "7: file" 7 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "8: misc0" 8 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "9: misc1" 9 >/dev/null 2>&1 || true
+    niri msg action move-workspace-to-index --reference "stash" 10 >/dev/null 2>&1 || true
+}
+
+wait_for_niri || exit 0
+
+order_workspaces
+
+if [ "${1:-}" != "order-only" ]; then
+    spawn_startup_apps
+fi
+
+niri msg action focus-workspace "1: terminal" >/dev/null 2>&1 || true

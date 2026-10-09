@@ -1,0 +1,10 @@
+{
+  "temperature": {
+    "critical-threshold": 80,
+    "warning-threshold": 60,
+    "format": "  {temperatureC}°C",
+    "tooltip": true,
+    "tooltip-format": "CPU temperature: {temperatureC}°C",
+    "on-click-right": "kitty --class sensors sh -lc 'if command -v sensors >/dev/null 2>&1; then sensors; else echo sensors command not found; fi; printf \"\\nPress enter to close...\"; read -r _'"
+  }
+}

@@ -11,17 +11,17 @@ require("noice").setup({
 	routes = {
 		{
 			filter = {
-				event = 'msg_show',
+				event = "msg_show",
 				any = {
-					{ find = '%d+L, %d+B' },
-					{ find = '; after #%d+' },
-					{ find = '; before #%d+' },
-					{ find = '%d fewer lines' },
-					{ find = '%d more lines' },
+					{ find = "%d+L, %d+B" },
+					{ find = "; after #%d+" },
+					{ find = "; before #%d+" },
+					{ find = "%d fewer lines" },
+					{ find = "%d more lines" },
 				},
 			},
 			opts = { skip = true },
-		}
+		},
 	},
 	views = {
 		cmdline_popup = {
@@ -49,7 +49,7 @@ require("noice").setup({
 				padding = { 0, 1 },
 			},
 			win_options = {
-				winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+				winhighlight = { Normal = "NoicePopupmenu", FloatBorder = "DiagnosticSignInfo" },
 			},
 		},
 	},
@@ -62,5 +62,4 @@ require("noice").setup({
 	},
 })
 
-
-vim.api.nvim_set_keymap('n', '<leader>n', ':NoiceDismiss<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>n", ":NoiceDismiss<CR>", { noremap = true, silent = true })

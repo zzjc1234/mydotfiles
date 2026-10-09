@@ -1,0 +1,67 @@
+font=Cantarell 11
+width=420
+height=140
+outer-margin=12
+margin=6
+padding=12
+border-size=2
+border-radius=8
+background-color=#1e1e2ecc
+text-color=#f0f0ffff
+border-color=#7fc8ffff
+progress-color=over #89b4faff
+default-timeout=5000
+ignore-timeout=1
+max-visible=5
+max-history=20
+layer=overlay
+anchor=top-right
+on-button-left=invoke-default-action
+on-button-middle=dismiss
+on-button-right=dismiss-all
+
+[app-name=Codex]
+default-timeout=10000
+history=0
+on-button-left=exec codex-mako-action focus "$id"
+on-button-middle=exec codex-mako-action acknowledge "$id"
+on-button-right=exec codex-mako-action reply "$id"
+
+[urgency=low]
+default-timeout=3000
+
+[urgency=critical]
+border-color=#f38ba8ff
+default-timeout=0
+
+[app-name=Codex urgency=critical]
+default-timeout=10000
+
+# A dedicated, large focus-timer card. Other notifications retain the
+# top-right defaults above.
+[app-name=FocusTimer]
+anchor=top-center
+outer-margin=52,0,0
+width=620
+height=180
+margin=0
+padding=20
+border-size=2
+border-radius=28
+font=Google Sans Flex 17
+background-color=#1e1e2ef2
+text-color=#cdd6f4ff
+border-color=#89dcebff
+progress-color=over #89dceb80
+text-alignment=center
+default-timeout=0
+ignore-timeout=1
+format=<span size="x-large"><b>%s</b></span>\n%b
+on-button-left=exec focus-timer status-toggle
+on-button-middle=exec focus-timer status-toggle
+on-button-right=exec focus-timer status-toggle
+
+[app-name=FocusTimer urgency=critical]
+background-color=#3b1e2ff2
+border-color=#f38ba8ff
+progress-color=over #f38ba880

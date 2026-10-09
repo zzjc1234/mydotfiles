@@ -1,0 +1,20 @@
+#!/bin/sh
+set -eu
+
+theme="$HOME/.config/rofi/clipboard.rasi"
+
+pkill -x rofi 2>/dev/null || true
+
+choice="$(
+    cliphist list |
+        "$HOME/.local/bin/rofi-smart" \
+            -dmenu \
+            -i \
+            -display-columns 2 \
+            -p Clipboard \
+            -theme "$theme"
+)" || exit 0
+
+[ -n "$choice" ] || exit 0
+
+printf '%s\n' "$choice" | cliphist decode | wl-copy

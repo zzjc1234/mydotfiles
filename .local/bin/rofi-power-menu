@@ -1,0 +1,34 @@
+#!/bin/sh
+
+theme="$HOME/.config/rofi/clipboard.rasi"
+
+confirm() {
+    printf '%s\n' "No" "Yes" |
+        "$HOME/.local/bin/rofi-smart" -dmenu -i -p "$1?" -theme "$theme" |
+        grep -qi '^yes$'
+}
+
+choice="$(printf '%s\n' \
+    "  Lock" \
+    "󰍹  Turn off display" \
+    "  Logout Niri" \
+    "  Reboot" \
+    "  Poweroff" | "$HOME/.local/bin/rofi-smart" -dmenu -i -p Power -theme "$theme")"
+
+case "$choice" in
+    *Lock)
+        exec "$HOME/.local/bin/lock-screen"
+        ;;
+    *"Turn off display")
+        exec "$HOME/.local/bin/power-off-monitors"
+        ;;
+    *"Logout Niri")
+        confirm "Logout Niri" && niri msg action quit --skip-confirmation
+        ;;
+    *Reboot)
+        confirm "Reboot" && systemctl reboot
+        ;;
+    *Poweroff)
+        confirm "Poweroff" && systemctl poweroff
+        ;;
+esac

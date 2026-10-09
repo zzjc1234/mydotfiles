@@ -1,0 +1,107 @@
+#!/bin/sh
+set -eu
+
+data=${NIRI_HOTKEYS_DATA:-${HOME}/.local/share/niri/hotkeys.tsv}
+theme=${NIRI_HOTKEYS_THEME:-${HOME}/.config/rofi/niri-hotkeys.rasi}
+
+if [ -n "${NIRI_HOTKEYS_ROFI:-}" ]; then
+    rofi_bin=$NIRI_HOTKEYS_ROFI
+elif [ -x ${HOME}/.local/bin/rofi-smart ]; then
+    rofi_bin=${HOME}/.local/bin/rofi-smart
+else
+    rofi_bin=rofi
+fi
+
+usage() {
+    cat <<EOF
+Usage: niri-hotkeys [--list]
+
+Open a searchable rofi menu for important niri hotkeys.
+
+Options:
+  --list    Print the formatted hotkey list and exit.
+EOF
+}
+
+print_rows() {
+    awk -F '\t' '
+        /^[[:space:]]*(#|$)/ { next }
+        NF >= 3 {
+            command = $4
+            if (command == "") {
+                command = "manual shortcut"
+            }
+            printf "%-12s  %-24s  %-42s\t%s\n", $1, $2, $3, command
+        }
+    ' "$data"
+}
+
+print_menu_rows() {
+    awk -F '\t' '
+        /^[[:space:]]*(#|$)/ { next }
+        NF >= 3 {
+            printf "%-12s  %-24s  %s\n", $1, $2, $3
+        }
+    ' "$data"
+}
+
+run_menu() {
+    [ -s "$data" ] || {
+        printf 'niri-hotkeys: missing data file: %s\n' "$data" >&2
+        exit 1
+    }
+
+    choice=$(
+        print_menu_rows | "$rofi_bin" \
+            -dmenu \
+            -i \
+            -p Hotkeys \
+            -theme "$theme" \
+            -no-custom
+    )
+
+    [ -n "$choice" ] || exit 0
+
+    category=$(printf '%s\n' "$choice" | awk '{ print $1 }')
+    key=$(printf '%s\n' "$choice" | awk '{ print $2 }')
+    command=$(
+        awk -F '\t' -v category="$category" -v key="$key" '
+            /^[[:space:]]*(#|$)/ { next }
+            $1 == category && $2 == key {
+                print $4
+                found = 1
+                exit
+            }
+            END { if (!found) exit 1 }
+        ' "$data"
+    ) || exit 0
+
+    case "$command" in
+        ""|"manual shortcut")
+            exit 0
+            ;;
+        *)
+            exec sh -c "$command"
+            ;;
+    esac
+}
+
+case "${1:-}" in
+    --list)
+        [ -s "$data" ] || {
+            printf 'niri-hotkeys: missing data file: %s\n' "$data" >&2
+            exit 1
+        }
+        print_rows
+        ;;
+    -h|--help)
+        usage
+        ;;
+    "")
+        run_menu
+        ;;
+    *)
+        usage >&2
+        exit 2
+        ;;
+esac
